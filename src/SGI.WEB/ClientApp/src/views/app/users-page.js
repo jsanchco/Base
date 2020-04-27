@@ -214,11 +214,13 @@ export default class UsersPage extends Component {
                       field="name"
                       headerText="Nombre"
                       width="100"
+                      headerTextAlign="center"
                     />
                     <ColumnDirective
                       field="surname"
                       headerText="Apellidos"
                       width="100"
+                      headerTextAlign="center"
                     />
                     <ColumnDirective
                       field="birthdate"
@@ -227,6 +229,8 @@ export default class UsersPage extends Component {
                       type="date"
                       format={this.format}
                       editType="datepickeredit"
+                      headerTextAlign="center"
+                      textAlign="center"
                     />
                     {/* <ColumnDirective
                       field="roleId"
