@@ -34,7 +34,7 @@
             }
         }
 
-        private bool RoleExists(int id)
+        public bool RoleExists(int id)
         {
             return GetById(id) != null;
         }
@@ -60,26 +60,17 @@
             return newRole;
         }
 
-        public bool Update(Role role)
+        public void Update(Role role)
         {
-            if (!RoleExists(role.Id))
-                return false;
-
             _context.Roles.Update(role);
             _context.SaveChanges();
-            return true;
         }
 
-        public bool Delete(int id)
+        public void Delete(int id)
         {
-            if (!RoleExists(id))
-                return false;
-
             var toRemove = _context.Roles.Find(id);
             _context.Roles.Remove(toRemove);
             _context.SaveChanges();
-            return true;
-
         }
     }
 }

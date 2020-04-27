@@ -37,9 +37,9 @@
             }
         }
 
-        private bool UserExists(int id)
+        public bool UserExists(int id)
         {
-            return GetById(id) != null;
+            return _context.Users.Any(x => x.Id == id);
         }
 
         public IEnumerable<User> GetAll()
@@ -62,25 +62,17 @@
             return newUser;
         }
 
-        public bool Update(User user)
+        public void Update(User user)
         {
-            if (!UserExists(user.Id))
-                return false;
-
             _context.Users.Update(user);
             _context.SaveChanges();
-            return true;
         }
 
-        public bool Delete(int id)
+        public void Delete(int id)
         {
-            if (!UserExists(id))
-                return false;
-
             var toRemove = _context.Users.Find(id);
             _context.Users.Remove(toRemove);
             _context.SaveChanges();
-            return true;
         }
     }
 }

@@ -13,6 +13,7 @@
         public RolesProfiles()
         {
             CreateMap<Role, RoleViewModel>();
+            CreateMap<RoleViewModel, Role>();
         }
     }
 }

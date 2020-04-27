@@ -4,7 +4,6 @@
 
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
-    using SGI.Domain.Helpers;
     using SGI.Domain.Models;
     using SGI.Domain.Supervisor;
     using System;
@@ -15,54 +14,48 @@
 
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class RolesController : ControllerBase
     {
         private readonly ISupervisor _supervisor;
-        private readonly ILogger<UsersController> _logger;
+        private readonly ILogger<RolesController> _logger;
 
-        public UsersController(ILogger<UsersController> logger, ISupervisor supervisor)
+        public RolesController(ILogger<RolesController> logger, ISupervisor supervisor)
         {
             _logger = logger ??
                 throw new ArgumentNullException(nameof(logger));
 
-            _supervisor = supervisor ?? 
+            _supervisor = supervisor ??
                 throw new ArgumentNullException(nameof(supervisor));
         }
 
-        // GET: api/Users
+        // GET: api/Roles
         [HttpGet]
-        public ActionResult<IEnumerable<UserViewModel>> GetUsers()
+        public ActionResult<IEnumerable<RoleViewModel>> GetRoles()
         {
             try
             {
-                var queryString = Request.Query;
-                var skip = Convert.ToInt32(queryString["$skip"]);
-                var take = Convert.ToInt32(queryString["$top"]);
-                var orderBy = Convert.ToString(queryString["$orderby"]);
-                var filter = ((string)queryString["$filter"]).GetSearcher();
-
-                var result = _supervisor.GetAllUsers(skip, take, orderBy, filter);
+                var result = _supervisor.GetAllRoles();
                 return Ok(new { Items = result.ToList(), Count = result.Count() });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex, "Exception: ");
                 return StatusCode(500, ex.Message);
             }
         }
 
-        // GET api/Users/5
-        [HttpGet("{userId}", Name = "GetUserById")]
-        public ActionResult GetUserById(int userId)
+        // GET api/Roles/5
+        [HttpGet("{roleId}", Name = "GetRoleById")]
+        public ActionResult GetRoleById(int roleId)
         {
             try
             {
-                if (!_supervisor.UserExists(userId))
+                if (!_supervisor.RoleExists(roleId))
                 {
                     return NotFound();
                 }
 
-                return Ok(_supervisor.GetUserById(userId));
+                return Ok(_supervisor.GetRoleById(roleId));
             }
             catch (Exception ex)
             {
@@ -72,14 +65,14 @@
         }
 
         [HttpPost]
-        public ActionResult AddUser([FromBody]UserViewModel userViewModel)
+        public ActionResult AddRole([FromBody]RoleViewModel roleViewModel)
         {
             try
             {
-                var result = _supervisor.AddUser(userViewModel);
+                var result = _supervisor.AddRole(roleViewModel);
 
-                return CreatedAtRoute("GetUserById", 
-                    new { userId = result.id },
+                return CreatedAtRoute("GetRoleById",
+                    new { roleId = result.id },
                     result);
             }
             catch (Exception ex)
@@ -90,25 +83,25 @@
         }
 
         [HttpPut]
-        public ActionResult UpdateUser([FromBody]UserViewModel userViewModel)
+        public ActionResult UpdateRole([FromBody]RoleViewModel roleViewModel)
         {
             try
             {
-                if (userViewModel == null)
+                if (roleViewModel == null)
                 {
-                    throw new ArgumentNullException(nameof(userViewModel));
+                    throw new ArgumentNullException(nameof(roleViewModel));
                 }
 
-                if (!_supervisor.UserExists(userViewModel.id))
+                if (!_supervisor.RoleExists(roleViewModel.id))
                 {
                     return NotFound();
                 }
 
-                _supervisor.UpdateUser(userViewModel);
+                _supervisor.UpdateRole(roleViewModel);
 
-                return CreatedAtRoute("GetUserById",
-                    new { userId = userViewModel.id },
-                    userViewModel);
+                return CreatedAtRoute("GetRoleById",
+                    new { roleId = roleViewModel.id },
+                    roleViewModel);
             }
             catch (Exception ex)
             {
@@ -117,19 +110,19 @@
             }
         }
 
-        // DELETE: api/users/5
-        [HttpDelete("{id:int}")]
-        //[Route("users/{id:int}")]
-        public ActionResult Delete(int userId)
+        // DELETE: api/Role/5
+        [HttpDelete("{roleId:int}")]
+        //[Route("api/Roles/{roleId:int}")]
+        public ActionResult Delete(int roleId)
         {
             try
             {
-                if (!_supervisor.UserExists(userId))
+                if (!_supervisor.RoleExists(roleId))
                 {
                     return NotFound();
                 }
 
-                _supervisor.DeleteUser(userId);
+                _supervisor.DeleteRole(roleId);
 
                 return NoContent();
             }

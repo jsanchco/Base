@@ -19,6 +19,8 @@ import {
 } from "@syncfusion/ej2-react-grids";
 import { DataManager, WebApiAdaptor } from "@syncfusion/ej2-data";
 import { L10n } from "@syncfusion/ej2-base";
+import { NotificationManager } from "../../components/common/react-notifications";
+import { getError } from "../../services";
 
 L10n.load(data);
 
@@ -29,10 +31,10 @@ export default class UsersPage extends Component {
     url: `${config.URL_API}/${USERS}`
   });
 
-  // roles = new DataManager({
-  //   adaptor: new WebApiAdaptor(),
-  //   url: `${config.URL_API}/${ROLES}`
-  // });
+  roles = new DataManager({
+    adaptor: new WebApiAdaptor(),
+    url: `${config.URL_API}/${ROLES}`
+  });
 
   roleIdRules = { required: true };
   grid = null;
@@ -40,7 +42,7 @@ export default class UsersPage extends Component {
 
   constructor(props) {
     super(props);
-    
+
     this.state = {
       rowSelected: null,
     };
@@ -79,32 +81,38 @@ export default class UsersPage extends Component {
   }
 
   actionFailure(args) {
-    // let error = Array.isArray(args) ? args[0].error : args.error;
-    // if (Array.isArray(error)) {
-    //   error = error[0].error;
-    // }
-    // this.props.showMessage({
-    //   statusText: error.statusText,
-    //   responseText: error.responseText,
-    //   type: "danger",
-    // });
+    const error = getError(args);
+    NotificationManager.error(
+      error.text,
+      `Tipo: ${error.status}`,
+      3000,
+      null,
+      null,
+      "filled"
+    );
   }
 
   actionComplete(args) {
     if (args.requestType === "save") {
-      // this.props.showMessage({
-      //   statusText: "200",
-      //   responseText: "Operación realizada con éxito",
-      //   type: "success",
-      // });
+      NotificationManager.success(
+        "Operación realizada con éxito",
+        "",
+        3000,
+        null,
+        null,
+        "filled"
+      );
       this.setState({ rowSelected: null });
     }
     if (args.requestType === "delete") {
-      // this.props.showMessage({
-      //   statusText: "200",
-      //   responseText: "Operación realizada con éxito",
-      //   type: "success",
-      // });
+      NotificationManager.success(
+        "Operación realizada con éxito",
+        "",
+        3000,
+        null,
+        null,
+        "filled"
+      );
       this.setState({ rowSelected: null });
     }
   }
@@ -232,13 +240,17 @@ export default class UsersPage extends Component {
                       headerTextAlign="center"
                       textAlign="center"
                     />
-                    {/* <ColumnDirective
+                    <ColumnDirective
                       field="roleId"
                       headerText="Role"
                       width="100"
-                      visible={false}
-                      defaultValue={3}
-                    /> */}
+                      editType="dropdownedit"
+                      foreignKeyValue="name"
+                      foreignKeyField="id"
+                      validationRules={this.roleIdRules}
+                      dataSource={this.roles}
+                      headerTextAlign="center"
+                    />
                   </ColumnsDirective>
                   <Inject
                     services={[ForeignKey, Group, Page, Toolbar, Edit, Sort]}

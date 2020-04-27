@@ -7,24 +7,27 @@
     using Domain.Helpers;
     using System.Linq;
     using SGI.Domain.Models;
+    using System;
 
     #endregion
 
     public partial class Supervisor
     {
-        public QueryResult<UserViewModel> GetAllUsers(int skip = 0, int take = 0, string orderBy = null, string filter = null, List<int> roles = null)
+        public bool UserExists(int id)
+        {
+            return _userRepository.UserExists(id);
+        }
+
+        public IEnumerable<UserViewModel> GetAllUsers(int skip = 0, int take = 0, string orderBy = null, string filter = null)
         {
             var users = _userRepository.GetAll();
-
-            if (roles != null)
-                users = users.Where(x => roles.Contains(x.RoleId));
 
             if (!string.IsNullOrEmpty(filter))
                 users = users
                     .Where(x =>
-                        Searcher.RemoveAccentsWithNormalization(x.Name.ToLower()).Contains(filter) ||
-                        Searcher.RemoveAccentsWithNormalization(x.Surname?.ToLower()).Contains(filter) ||
-                        Searcher.RemoveAccentsWithNormalization(x.Role.Name.ToLower()).Contains(filter));
+                        x.Name.ToLower().RemoveAccentsWithNormalization().Contains(filter) ||
+                        x.Surname.ToLower().RemoveAccentsWithNormalization().Contains(filter) ||
+                        x.Role.Name.ToLower().RemoveAccentsWithNormalization().Contains(filter));
 
             if (!string.IsNullOrEmpty(orderBy))
             {
@@ -52,9 +55,7 @@
             if (take != 0)
                 users = users.Take(take);
 
-            var result = _mapper.Map<IEnumerable<UserViewModel>>(users);
-
-            return new QueryResult<UserViewModel> { Count = result.Count(), Items = result.ToList() };
+            return _mapper.Map<IEnumerable<UserViewModel>>(users);
         }
 
         public UserViewModel GetUserById(int id)
@@ -65,22 +66,27 @@
 
         public UserViewModel AddUser(UserViewModel newUserViewModel)
         {
+            if (newUserViewModel == null)
+            {
+                throw new ArgumentNullException(nameof(newUserViewModel));
+            }
+
             var user = _mapper.Map<User>(newUserViewModel);
             _userRepository.Add(user);
 
             return newUserViewModel;
         }
 
-        public bool UpdateUser(UserViewModel userViewModel)
+        public void UpdateUser(UserViewModel userViewModel)
         {
             var user = _mapper.Map<User>(userViewModel);
 
-            return _userRepository.Update(user);
+            _userRepository.Update(user);
         }
 
-        public bool DeleteUser(int id)
+        public void DeleteUser(int id)
         {
-            return _userRepository.Delete(id);
+            _userRepository.Delete(id);
         }
     }
 }

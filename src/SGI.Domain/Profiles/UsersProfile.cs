@@ -20,6 +20,8 @@
                 .ForMember(
                     dest => dest.roleName,
                     opt => opt.MapFrom(src => src.Role.Name));
+
+            CreateMap<UserViewModel, User>();
         }
     }
 }

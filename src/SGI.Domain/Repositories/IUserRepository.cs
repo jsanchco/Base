@@ -11,10 +11,11 @@
 
     public interface IUserRepository : IDisposable
     {
+        bool UserExists(int id);
         IEnumerable<User> GetAll();
         User GetById(int id);
         User Add(User newUser);
-        bool Update(User user);
-        bool Delete(int id);
+        void Update(User user);
+        void Delete(int id);
     }
 }

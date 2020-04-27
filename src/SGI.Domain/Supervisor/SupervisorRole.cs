@@ -12,7 +12,12 @@
 
     public partial class Supervisor
     {
-        public List<RoleViewModel> GetAllRole()
+        public bool RoleExists(int id)
+        {
+            return _roleRepository.RoleExists(id);
+        }
+
+        public List<RoleViewModel> GetAllRoles()
         {
             var roles = _roleRepository.GetAll();
             var result = _mapper.Map<IEnumerable<RoleViewModel>>(roles);
@@ -27,22 +32,27 @@
 
         public RoleViewModel AddRole(RoleViewModel newRoleViewModel)
         {
+            if (newRoleViewModel == null)
+            {
+                throw new ArgumentNullException(nameof(newRoleViewModel));
+            }
+
             var role = _mapper.Map<Role>(newRoleViewModel);
             _roleRepository.Add(role);
 
             return newRoleViewModel;
         }
 
-        public bool UpdateRole(RoleViewModel roleViewModel)
+        public void UpdateRole(RoleViewModel roleViewModel)
         {
             var role = _mapper.Map<Role>(roleViewModel);
 
-            return _roleRepository.Update(role);
+            _roleRepository.Update(role);
         }
 
-        public bool DeleteRole(int id)
+        public void DeleteRole(int id)
         {
-            return _roleRepository.Delete(id);
+            _roleRepository.Delete(id);
         }
     }
 }
