@@ -39,6 +39,7 @@
 
             var role = _mapper.Map<Role>(newRoleViewModel);
             _roleRepository.Add(role);
+            newRoleViewModel = _mapper.Map<RoleViewModel>(role);
 
             return newRoleViewModel;
         }

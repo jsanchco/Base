@@ -73,6 +73,7 @@
 
             var user = _mapper.Map<User>(newUserViewModel);
             _userRepository.Add(user);
+            newUserViewModel = _mapper.Map<UserViewModel>(user);
 
             return newUserViewModel;
         }

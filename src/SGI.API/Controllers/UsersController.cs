@@ -113,13 +113,13 @@
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Exception: ");
-                return StatusCode(500, ex);
+                return StatusCode(500, ex.Message);
             }
         }
 
         // DELETE: api/users/5
-        [HttpDelete("{id:int}")]
-        //[Route("users/{id:int}")]
+        [HttpDelete("{userId:int}")]
+        //[Route("users/{userId:int}")]
         public ActionResult Delete(int userId)
         {
             try

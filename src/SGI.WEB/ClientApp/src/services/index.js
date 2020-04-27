@@ -7,5 +7,19 @@ export const getError = (args) => {
     };
   }
 
+  if (Array.isArray(args) && args[0]) {
+    return {
+      status: args[0].error.status,
+      text: args[0].error.responseText === "" ? "unknown" : args[0].error.responseText
+    };
+  }
+
+  if (args.error && args.error.message) {
+    return {
+      status: -1,
+      text: args.error.message
+    };
+  }
+
   return { status: -1, text: "unknown" }
 };
