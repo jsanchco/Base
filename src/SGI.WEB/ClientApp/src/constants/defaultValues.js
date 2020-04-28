@@ -30,6 +30,7 @@ export const isDemo = true;
 
 export const USERS = "api/Users";
 export const ROLES = "api/Roles";
+export const AUTHENTICATE = "api/Authenticate";
 
 const dev = {
   URL_API: "https://localhost:44325"

@@ -16,7 +16,7 @@ module.exports = {
   "user.login-title": "Iniciar sesión",
   "user.register": "Registro",
   "user.forgot-password": "Se te olvidó tu contraseña",
-  "user.email": "Email",
+  "user.email": "Username",
   "user.password": "Contraseña",
   "user.forgot-password-question": "¿Contraseña olvidada?",
   "user.fullname": "Nombre completo",

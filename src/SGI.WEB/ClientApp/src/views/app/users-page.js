@@ -69,6 +69,7 @@ export default class UsersPage extends Component {
       newRowPosition: "Top",
     };
     this.pageSettings = { pageCount: 10, pageSize: 10 };
+    this.customAttributes = { class: "customcss" };
 
     this.actionFailure = this.actionFailure.bind(this);
     this.actionComplete = this.actionComplete.bind(this);
@@ -223,12 +224,14 @@ export default class UsersPage extends Component {
                       headerText="Nombre"
                       width="100"
                       headerTextAlign="center"
+                      customAttributes={this.customAttributes}
                     />
                     <ColumnDirective
                       field="surname"
                       headerText="Apellidos"
                       width="100"
                       headerTextAlign="center"
+                      customAttributes={this.customAttributes}
                     />
                     <ColumnDirective
                       field="birthdate"
@@ -239,6 +242,7 @@ export default class UsersPage extends Component {
                       editType="datepickeredit"
                       headerTextAlign="center"
                       textAlign="center"
+                      customAttributes={this.customAttributes}
                     />
                     <ColumnDirective
                       field="roleId"
@@ -250,6 +254,7 @@ export default class UsersPage extends Component {
                       validationRules={this.roleIdRules}
                       dataSource={this.roles}
                       headerTextAlign="center"
+                      customAttributes={this.customAttributes}
                     />
                   </ColumnsDirective>
                   <Inject

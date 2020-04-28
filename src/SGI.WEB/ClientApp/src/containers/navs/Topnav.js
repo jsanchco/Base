@@ -15,7 +15,8 @@ import IntlMessages from "../../helpers/IntlMessages";
 import {
   setContainerClassnames,
   clickOnMobileMenu,
-  changeLocale
+  changeLocale,
+  logoutUser
 } from "../../redux/actions";
 
 import {
@@ -175,6 +176,7 @@ class TopNav extends Component {
 
   handleLogout = () => {
     //logout
+    this.props.logoutUser(this.props.history);
   };
 
   menuButtonClick = (e, menuClickCount, containerClassnames) => {
@@ -333,6 +335,6 @@ const mapStateToProps = ({ menu, settings }) => {
 export default injectIntl(
   connect(
     mapStateToProps,
-    { setContainerClassnames, clickOnMobileMenu, changeLocale }
+    { setContainerClassnames, clickOnMobileMenu, changeLocale, logoutUser }
   )(TopNav)
 );

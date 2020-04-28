@@ -32,7 +32,8 @@
                 case "SQL":
                     services
                         .AddScoped<IUserRepository, UserRepository>()
-                        .AddScoped<IRoleRepository, RoleRepository>();
+                        .AddScoped<IRoleRepository, RoleRepository>()
+                        .AddScoped<IAuthenticateRepository, AuthenticateRepository>();
 
                     break;
                 case "MySQL":
@@ -44,7 +45,8 @@
                 default:
                     services
                         .AddScoped<IUserRepository, UserRepository>()
-                        .AddScoped<IRoleRepository, RoleRepository>();
+                        .AddScoped<IRoleRepository, RoleRepository>()
+                        .AddScoped<IAuthenticateRepository, AuthenticateRepository>();
 
                     break;
             }

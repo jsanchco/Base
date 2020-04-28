@@ -13,6 +13,7 @@
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
+        private readonly IAuthenticateRepository _authenticateRepository;
 
         public Supervisor()
         {
@@ -21,7 +22,8 @@
         public Supervisor(
             IMapper mapper,
             IUserRepository userRepository,
-            IRoleRepository roleRepository)
+            IRoleRepository roleRepository,
+            IAuthenticateRepository authenticateRepository)
         {
             _mapper = mapper ??
                 throw new ArgumentNullException(nameof(mapper));
@@ -31,6 +33,9 @@
 
             _roleRepository = roleRepository ??
                 throw new ArgumentNullException(nameof(roleRepository));
+
+            _authenticateRepository = authenticateRepository ??
+                throw new ArgumentNullException(nameof(authenticateRepository));
         }
     }
 }

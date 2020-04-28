@@ -23,6 +23,30 @@ const ViewApp = React.lazy(() =>
 const ViewError = React.lazy(() =>
   import(/* webpackChunkName: "views-error" */ './views/error')
 );
+const ViewUser = React.lazy(() =>
+  import(/* webpackChunkName: "views-user" */ './views/user')
+);
+
+const AuthRoute = ({ component: Component, authUser, ...rest }) => {
+  console.log("authUser ->", authUser);
+  return (
+    <Route
+      {...rest}
+      render={props =>
+        authUser ? (
+          <Component {...props} />
+        ) : (
+            <Redirect
+              to={{
+                pathname: '/user/login',
+                state: { from: props.location }
+              }}
+            />
+          )
+      }
+    />
+  );
+}
 
 class App extends Component {
   constructor(props) {
@@ -38,7 +62,7 @@ class App extends Component {
   }
 
   render() {
-    const { locale } = this.props;
+    const { locale, loginUser } = this.props;
     const currentAppLocale = AppLocale[locale];
 
     return (
@@ -53,6 +77,15 @@ class App extends Component {
             <Suspense fallback={<div className="loading" />}>
               <Router>
                 <Switch>
+                  <AuthRoute
+                    path="/app"
+                    authUser={loginUser}
+                    component={ViewApp}
+                  />
+                  <Route
+                    path="/user"
+                    render={props => <ViewUser {...props} />}
+                  />
                   <Route
                     path="/app"
                     render={props => <ViewApp {...props} />}
@@ -78,9 +111,10 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = ({ settings }) => {
+const mapStateToProps = ({ authUser, settings }) => {
+  const { user: loginUser } = authUser;
   const { locale } = settings;
-  return { locale };
+  return { loginUser, locale };
 };
 const mapActionsToProps = {};
 

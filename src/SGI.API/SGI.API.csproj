@@ -24,5 +24,9 @@
     <ProjectReference Include="..\SGI.Domain\SGI.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 
 </Project>

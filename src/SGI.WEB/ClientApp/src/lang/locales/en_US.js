@@ -17,7 +17,7 @@ module.exports = {
   "user.login-title": "Login",
   "user.register": "Register",
   "user.forgot-password": "Forgot Password",
-  "user.email": "E-mail",
+  "user.email": "Username",
   "user.password": "Password",
   "user.forgot-password-question": "Forget password?",
   "user.fullname": "Full Name",

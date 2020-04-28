@@ -13,6 +13,7 @@
         public string fullName => $"{name} {surname}";
         public string surname { get; set; }
         public string birthdate { get; set; }
+        public string username { get; set; }
 
         public int roleId { get; set; }
         public string roleName { get; set; }

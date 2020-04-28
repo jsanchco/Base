@@ -2,12 +2,12 @@ import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
-import { configureStore } from './redux/store';
+import store from './redux/store';
 
 const App = React.lazy(() => import(/* webpackChunkName: "App" */'./App' ));
 
 ReactDOM.render(
-  <Provider store={configureStore()}>
+  <Provider store={store}>
     <Suspense fallback={<div className="loading" />}>
       <App />
     </Suspense>

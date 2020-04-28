@@ -3,6 +3,8 @@
     #region Using
 
     using System.Collections.Generic;
+    using System.Threading;
+    using System.Threading.Tasks;
     using Domain.Helpers;
     using SGI.Domain.Models;
 
@@ -10,6 +12,12 @@
 
     public interface ISupervisor
     {
+        #region Authenticate
+
+        Task<UserViewModel> Login(string user, string password, CancellationToken ct = default);
+
+        #endregion
+
         #region User
 
         bool UserExists(int id);
