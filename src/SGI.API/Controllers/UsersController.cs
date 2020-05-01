@@ -44,8 +44,7 @@
                 var orderBy = Convert.ToString(queryString["$orderby"]);
                 var filter = ((string)queryString["$filter"]).GetSearcher();
 
-                var result = _supervisor.GetAllUsers(skip, take, orderBy, filter);
-                return Ok(new { Items = result.ToList(), Count = result.Count() });
+                return Ok(_supervisor.GetAllUsers(skip, take, orderBy, filter));
             }
             catch(Exception ex)
             {

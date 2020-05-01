@@ -2,12 +2,12 @@
 {
     #region Using
 
-    using System.Collections.Generic;
-    using Entities;
     using Domain.Helpers;
-    using System.Linq;
+    using Entities;
     using SGI.Domain.Models;
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     #endregion
 
@@ -18,7 +18,7 @@
             return _userRepository.UserExists(id);
         }
 
-        public IEnumerable<UserViewModel> GetAllUsers(int skip = 0, int take = 0, string orderBy = null, string filter = null)
+        public QueryResult<UserViewModel> GetAllUsers(int skip = 0, int take = 0, string orderBy = null, string filter = null)
         {
             var users = _userRepository.GetAll();
 
@@ -49,13 +49,17 @@
                 }
             }
 
+            var count = users.Count();
+
             if (skip != 0)
                 users = users.Skip(skip);
 
             if (take != 0)
                 users = users.Take(take);
 
-            return _mapper.Map<IEnumerable<UserViewModel>>(users);
+           var result = _mapper.Map<IEnumerable<UserViewModel>>(users);
+
+            return new QueryResult<UserViewModel> { Items = result.ToList(), Count = count };
         }
 
         public UserViewModel GetUserById(int id)

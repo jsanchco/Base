@@ -39,7 +39,7 @@
             return GetById(id) != null;
         }
 
-        public List<Role> GetAll()
+        public IEnumerable<Role> GetAll()
         {
             return _context.Roles
                 .Include(x => x.Users)

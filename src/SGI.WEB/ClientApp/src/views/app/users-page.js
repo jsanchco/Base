@@ -4,7 +4,7 @@ import IntlMessages from "../../helpers/IntlMessages";
 import { Colxx, Separator } from "../../components/common/CustomBootstrap";
 import Breadcrumb from "../../containers/navs/Breadcrumb";
 import data from "../../locales/locale.json";
-import { config, USERS, ROLES } from "../../constants/defaultValues";
+import { USERS, ROLES } from "../../constants/defaultValues";
 import {
   ColumnDirective,
   ColumnsDirective,
@@ -17,7 +17,6 @@ import {
   Group,
   Sort,
 } from "@syncfusion/ej2-react-grids";
-import { DataManager, WebApiAdaptor } from "@syncfusion/ej2-data";
 import { L10n } from "@syncfusion/ej2-base";
 import { NotificationManager } from "../../components/common/react-notifications";
 import { getError } from "../../helpers/Utils";

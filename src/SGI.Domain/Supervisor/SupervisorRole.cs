@@ -17,11 +17,21 @@
             return _roleRepository.RoleExists(id);
         }
 
-        public List<RoleViewModel> GetAllRoles()
+        public QueryResult<RoleViewModel> GetAllRoles(int skip = 0, int take = 0)
         {
             var roles = _roleRepository.GetAll();
+
+            var count = roles.Count();
+
+            if (skip != 0)
+                roles = roles.Skip(skip);
+
+            if (take != 0)
+                roles = roles.Take(take);
+
             var result = _mapper.Map<IEnumerable<RoleViewModel>>(roles);
-            return result.ToList();
+
+            return new QueryResult<RoleViewModel> { Items = result.ToList(), Count = count };
         }
 
         public RoleViewModel GetRoleById(int id)

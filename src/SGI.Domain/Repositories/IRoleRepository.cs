@@ -11,7 +11,7 @@
     public interface IRoleRepository : IDisposable
     {
         bool RoleExists(int id);
-        List<Role> GetAll();
+        IEnumerable<Role> GetAll();
         Role GetById(int id);
         Role Add(Role newRole);
         void Update(Role role);

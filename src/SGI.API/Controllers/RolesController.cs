@@ -37,8 +37,11 @@
         {
             try
             {
-                var result = _supervisor.GetAllRoles();
-                return Ok(new { Items = result.ToList(), Count = result.Count() });
+                var queryString = Request.Query;
+                var skip = Convert.ToInt32(queryString["$skip"]);
+                var take = Convert.ToInt32(queryString["$top"]);
+
+                return Ok(_supervisor.GetAllRoles());
             }
             catch (Exception ex)
             {
