@@ -63,14 +63,14 @@ export const getError = (args) => {
   if (args.error && args.error.error) {
     return {
       status: args.error.error.status,
-      text: args.error.error.responseText === "" ? "unknown" : args.error.error.responseText
+      text: args.error.error.responseText === "" ? getTextError(args.error.error.status) : args.error.error.responseText
     };
   }
 
   if (Array.isArray(args) && args[0]) {
     return {
       status: args[0].error.status,
-      text: args[0].error.responseText === "" ? "unknown" : args[0].error.responseText
+      text: args[0].error.responseText === "" ? getTextError(args[0].error.status) : args[0].error.responseText
     };
   }
 
@@ -81,8 +81,24 @@ export const getError = (args) => {
     };
   }
 
-  return { status: -1, text: "unknown" }
+  return { status: -1, text: "Unknown" }
 };
+
+export const getTextError = status => {
+  switch (status) {
+    case 401:
+      return "Unauthorized";
+    case 403:
+      return "Forbidden";
+    case 404:
+      return "Not Found";
+    case 406:
+      return "Not Acceptable";
+
+    default:
+      return "Unknown";
+  }
+}
 
 export const getDataMaanager = urlApi => {
   return (
