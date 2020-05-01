@@ -4,14 +4,16 @@
 
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
-    using SGI.Domain.Models;
-    using SGI.Domain.Supervisor;
+    using Domain.Models;
+    using Domain.Supervisor;
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Microsoft.AspNetCore.Authorization;
 
     #endregion
 
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class RolesController : ControllerBase

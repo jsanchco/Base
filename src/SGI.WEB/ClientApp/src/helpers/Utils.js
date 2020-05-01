@@ -1,4 +1,6 @@
 import { defaultDirection } from "../constants/defaultValues";
+import { DataManager, WebApiAdaptor } from "@syncfusion/ej2-data";
+import { config } from "../constants/defaultValues";
 
 export const mapOrder = (array, order, key) => {
   array.sort(function (a, b) {
@@ -28,7 +30,7 @@ export const getDateWithFormat = () => {
   return dd + '.' + mm + '.' + yyyy;
 }
 
-export const getCurrentTime=()=>{
+export const getCurrentTime = () => {
   const now = new Date();
   return now.getHours() + ":" + now.getMinutes()
 }
@@ -54,5 +56,41 @@ export const setDirection = localValue => {
     direction = localValue;
   }
   localStorage.setItem("direction", direction);
+};
+
+export const getError = (args) => {
+  console.log("error ->", args);
+  if (args.error && args.error.error) {
+    return {
+      status: args.error.error.status,
+      text: args.error.error.responseText === "" ? "unknown" : args.error.error.responseText
+    };
+  }
+
+  if (Array.isArray(args) && args[0]) {
+    return {
+      status: args[0].error.status,
+      text: args[0].error.responseText === "" ? "unknown" : args[0].error.responseText
+    };
+  }
+
+  if (args.error && args.error.message) {
+    return {
+      status: -1,
+      text: args.error.message
+    };
+  }
+
+  return { status: -1, text: "unknown" }
+};
+
+export const getDataMaanager = urlApi => {
+  return (
+    new DataManager({
+      adaptor: new WebApiAdaptor(),
+      url: `${config.URL_API}/${urlApi}`,
+      headers: [{ Authorization: "Bearer " + localStorage.getItem('jwt') }]
+    })
+  );
 };
 

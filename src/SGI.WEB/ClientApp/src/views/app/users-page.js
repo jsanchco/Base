@@ -20,21 +20,15 @@ import {
 import { DataManager, WebApiAdaptor } from "@syncfusion/ej2-data";
 import { L10n } from "@syncfusion/ej2-base";
 import { NotificationManager } from "../../components/common/react-notifications";
-import { getError } from "../../services";
+import { getError } from "../../helpers/Utils";
+import { getDataMaanager } from "../../helpers/Utils";
 
 L10n.load(data);
 
 export default class UsersPage extends Component {
 
-  users = new DataManager({
-    adaptor: new WebApiAdaptor(),
-    url: `${config.URL_API}/${USERS}`
-  });
-
-  roles = new DataManager({
-    adaptor: new WebApiAdaptor(),
-    url: `${config.URL_API}/${ROLES}`
-  });
+  users = getDataMaanager(USERS);
+  roles = getDataMaanager(ROLES);
 
   roleIdRules = { required: true };
   grid = null;
@@ -85,7 +79,7 @@ export default class UsersPage extends Component {
     const error = getError(args);
     NotificationManager.error(
       error.text,
-      `Tipo: ${error.status}`,
+      `Status: ${error.status}`,
       3000,
       null,
       null,
