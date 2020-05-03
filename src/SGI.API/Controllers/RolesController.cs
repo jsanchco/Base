@@ -32,7 +32,6 @@
                 throw new ArgumentNullException(nameof(supervisor));
         }
 
-        // GET: api/Roles
         [HttpGet]
         public async Task<ActionResult<QueryResult<RoleViewModel>>> GetRoles()
         {
@@ -67,7 +66,6 @@
             }
         }
 
-        // GET api/Roles/5
         [HttpGet("{roleId}", Name = "GetRoleById")]
         public async Task<ActionResult> GetRoleById(int roleId)
         {
@@ -141,9 +139,7 @@
             }
         }
 
-        // DELETE: api/Role/5
         [HttpDelete("{roleId:int}")]
-        //[Route("api/Roles/{roleId:int}")]
         public async Task<ActionResult> Delete(int roleId)
         {
             try

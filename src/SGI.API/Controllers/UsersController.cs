@@ -32,7 +32,6 @@
                 throw new ArgumentNullException(nameof(supervisor));
         }
 
-        // GET: api/Users
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserViewModel>>> GetUsers()
         {
@@ -53,7 +52,6 @@
             }
         }
 
-        // GET api/Users/5
         [HttpGet("{userId}", Name = "GetUserById")]
         public async Task<ActionResult> GetUserById(int userId)
         {
@@ -127,9 +125,7 @@
             }
         }
 
-        // DELETE: api/users/5
         [HttpDelete("{userId:int}")]
-        //[Route("users/{userId:int}")]
         public async Task<ActionResult> Delete(int userId)
         {
             try
