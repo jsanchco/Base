@@ -4,10 +4,12 @@
 
     using Domain.Helpers;
     using Entities;
+    using Microsoft.EntityFrameworkCore;
     using SGI.Domain.Models;
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
 
     #endregion
 
@@ -18,7 +20,7 @@
             return _userRepository.UserExists(id);
         }
 
-        public QueryResult<UserViewModel> GetAllUsers(int skip = 0, int take = 0, string orderBy = null, string filter = null)
+        public async Task<QueryResult<UserViewModel>> GetAllUsersAsync(int skip = 0, int take = 0, string orderBy = null, string filter = null)
         {
             var users = _userRepository.GetAll();
 
@@ -57,14 +59,14 @@
             if (take != 0)
                 users = users.Take(take);
 
-           var result = _mapper.Map<IEnumerable<UserViewModel>>(users);
+           var result = _mapper.Map<IEnumerable<UserViewModel>>(await users.ToListAsync());
 
             return new QueryResult<UserViewModel> { Items = result.ToList(), Count = count };
         }
 
-        public UserViewModel GetUserById(int id)
+        public async Task<UserViewModel> GetUserByIdAsync(int id)
         {
-            var user = _userRepository.GetById(id);
+            var user = await _userRepository.GetByIdAsync(id);
             return _mapper.Map<UserViewModel>(user);
         }
 

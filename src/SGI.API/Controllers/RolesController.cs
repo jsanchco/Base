@@ -41,9 +41,7 @@
                 var skip = Convert.ToInt32(queryString["$skip"]);
                 var take = Convert.ToInt32(queryString["$top"]);
 
-                var result = await _supervisor.GetAllRoles(skip, take);
-
-                return Ok(result);
+                return Ok(await _supervisor.GetAllRolesAsync(skip, take));
             }
             catch (Exception ex)
             {
@@ -54,7 +52,7 @@
 
         // GET api/Roles/5
         [HttpGet("{roleId}", Name = "GetRoleById")]
-        public ActionResult GetRoleById(int roleId)
+        public async Task<ActionResult> GetRoleById(int roleId)
         {
             try
             {
@@ -63,7 +61,7 @@
                     return NotFound();
                 }
 
-                return Ok(_supervisor.GetRoleById(roleId));
+                return Ok(await _supervisor.GetRoleByIdAsync(roleId));
             }
             catch (Exception ex)
             {

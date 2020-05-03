@@ -42,7 +42,7 @@
             return _context.Users.Any(x => x.Id == id);
         }
 
-        public IEnumerable<User> GetAll()
+        public IQueryable<User> GetAll()
         {
             return _context.Users
                 .Include(x => x.Role);
@@ -53,6 +53,13 @@
             return _context.Users
                 .Include(x => x.Role)
                 .FirstOrDefault(x => x.Id == id);
+        }
+
+        public async Task<User> GetByIdAsync(int id)
+        {
+            return await _context.Users
+                .Include(x => x.Role)
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public User Add(User newUser)

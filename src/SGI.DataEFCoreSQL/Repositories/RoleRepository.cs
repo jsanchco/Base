@@ -7,6 +7,7 @@
     using Microsoft.EntityFrameworkCore;
     using System;
     using System.Linq;
+    using System.Threading.Tasks;
 
     #endregion
 
@@ -38,17 +39,24 @@
             return GetById(id) != null;
         }
 
+        public Role GetById(int id)
+        {
+            return _context.Roles
+                .Include(x => x.Users)
+                .FirstOrDefault(x => x.Id == id);
+        }
+
         public IQueryable<Role> GetAll()
         {
             return _context.Roles
                 .Include(x => x.Users);
         }
 
-        public Role GetById(int id)
+        public async Task<Role> GetByIdAsync(int id)
         {
-            return _context.Roles
+            return await _context.Roles
                 .Include(x => x.Users)
-                .FirstOrDefault(x => x.Id == id);
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public Role Add(Role newRole)

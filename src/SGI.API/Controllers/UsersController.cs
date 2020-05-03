@@ -11,7 +11,7 @@
     using SGI.Domain.Supervisor;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
+    using System.Threading.Tasks;
 
     #endregion
 
@@ -34,7 +34,7 @@
 
         // GET: api/Users
         [HttpGet]
-        public ActionResult<IEnumerable<UserViewModel>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserViewModel>>> GetUsers()
         {
             try
             {
@@ -44,7 +44,7 @@
                 var orderBy = Convert.ToString(queryString["$orderby"]);
                 var filter = ((string)queryString["$filter"]).GetSearcher();
 
-                return Ok(_supervisor.GetAllUsers(skip, take, orderBy, filter));
+                return Ok(await _supervisor.GetAllUsersAsync(skip, take, orderBy, filter));
             }
             catch(Exception ex)
             {
@@ -55,7 +55,7 @@
 
         // GET api/Users/5
         [HttpGet("{userId}", Name = "GetUserById")]
-        public ActionResult GetUserById(int userId)
+        public async Task<ActionResult> GetUserById(int userId)
         {
             try
             {
@@ -64,7 +64,7 @@
                     return NotFound();
                 }
 
-                return Ok(_supervisor.GetUserById(userId));
+                return Ok(await _supervisor.GetUserByIdAsync(userId));
             }
             catch (Exception ex)
             {
