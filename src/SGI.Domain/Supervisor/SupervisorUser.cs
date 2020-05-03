@@ -64,13 +64,20 @@
             return new QueryResult<UserViewModel> { Items = result.ToList(), Count = count };
         }
 
+        public async Task<QueryResult<UserViewModel>> GetUsersByRolesAsync(IEnumerable<int> ids)
+        {
+            var result = _mapper.Map<IEnumerable<UserViewModel>>(await _userRepository.GetByRoles(ids).ToListAsync());
+
+            return new QueryResult<UserViewModel> { Items = result.ToList(), Count = result.Count() };
+        }
+
         public async Task<UserViewModel> GetUserByIdAsync(int id)
         {
             var user = await _userRepository.GetByIdAsync(id);
             return _mapper.Map<UserViewModel>(user);
         }
 
-        public UserViewModel AddUser(UserViewModel newUserViewModel)
+        public async Task<TransactionResult<UserViewModel>> AddUserAsync(UserViewModel newUserViewModel)
         {
             if (newUserViewModel == null)
             {
@@ -78,22 +85,23 @@
             }
 
             var user = _mapper.Map<User>(newUserViewModel);
-            _userRepository.Add(user);
-            newUserViewModel = _mapper.Map<UserViewModel>(user);
+            var result = await _userRepository.AddAsync(user);
 
-            return newUserViewModel;
+            return result.Result && result.Item != null
+                ? new TransactionResult<UserViewModel> { Result = result.Result, Item = _mapper.Map<UserViewModel>(result.Item) }
+                : new TransactionResult<UserViewModel> { Result = result.Result, Item = null };
         }
 
-        public void UpdateUser(UserViewModel userViewModel)
+        public async Task<bool> UpdateUserAsync(UserViewModel userViewModel)
         {
             var user = _mapper.Map<User>(userViewModel);
 
-            _userRepository.Update(user);
+            return await _userRepository.UpdateAsync(user);
         }
 
-        public void DeleteUser(int id)
+        public async Task<bool> DeleteUserAsync(int id)
         {
-            _userRepository.Delete(id);
+            return await _userRepository.DeleteAsync(id);
         }
     }
 }

@@ -3,6 +3,8 @@
     #region Using
 
     using SGI.Domain.Models;
+    using System.Collections;
+    using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -20,10 +22,11 @@
 
         bool UserExists(int id);
         Task<QueryResult<UserViewModel>> GetAllUsersAsync(int skip = 0, int take = 0, string orderBy= null, string filter = null);
+        Task<QueryResult<UserViewModel>> GetUsersByRolesAsync(IEnumerable<int> ids);
         Task<UserViewModel> GetUserByIdAsync(int id);
-        UserViewModel AddUser(UserViewModel newUserViewModel);
-        void UpdateUser(UserViewModel userViewModel);
-        void DeleteUser(int id);
+        Task<TransactionResult<UserViewModel>> AddUserAsync(UserViewModel newUserViewModel);
+        Task<bool> UpdateUserAsync(UserViewModel userViewModel);
+        Task<bool> DeleteUserAsync(int id);
 
         #endregion
 
@@ -32,9 +35,9 @@
         bool RoleExists(int id);
         Task <QueryResult<RoleViewModel>> GetAllRolesAsync(int skip, int take);
         Task<RoleViewModel> GetRoleByIdAsync(int id);
-        RoleViewModel AddRole(RoleViewModel newRoleViewModel);
-        void UpdateRole(RoleViewModel roleViewModel);
-        void DeleteRole(int id);
+        Task<TransactionResult<RoleViewModel>> AddRoleAsync(RoleViewModel newRoleViewModel);
+        Task<bool> UpdateRoleAsync(RoleViewModel roleViewModel);
+        Task<bool> DeleteRoleAsync(int id);
 
         #endregion
     }

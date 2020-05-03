@@ -17,17 +17,18 @@ import {
   Group,
   Sort,
 } from "@syncfusion/ej2-react-grids";
+import { Query } from "@syncfusion/ej2-data";
 import { L10n } from "@syncfusion/ej2-base";
 import { NotificationManager } from "../../components/common/react-notifications";
 import { getError } from "../../helpers/Utils";
-import { getDataMaanager } from "../../helpers/Utils";
+import { getDataManager } from "../../helpers/Utils";
 
 L10n.load(data);
 
 export default class UsersPage extends Component {
 
-  users = getDataMaanager(USERS);
-  roles = getDataMaanager(ROLES);
+  users = getDataManager(USERS);
+  roles = getDataManager(ROLES);
 
   roleIdRules = { required: true };
   grid = null;
@@ -122,6 +123,11 @@ export default class UsersPage extends Component {
         args.data.birthDate = date;
       }
     }
+    // if (args.requestType === "beginEdit") {
+    //   this.grid.query = [];
+    //   this.grid.query = new Query().addParams("id", args.rowData.id);
+    //   // console.log("this.grid ->", this.grid);
+    // }
   }
 
   clickHandler(args) {

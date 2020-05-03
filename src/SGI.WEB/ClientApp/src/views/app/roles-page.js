@@ -20,13 +20,13 @@ import {
 import { L10n } from "@syncfusion/ej2-base";
 import { NotificationManager } from "../../components/common/react-notifications";
 import { getError } from "../../helpers/Utils";
-import { getDataMaanager } from "../../helpers/Utils";
+import { getDataManager } from "../../helpers/Utils";
 
 L10n.load(data);
 
 export default class RolesPage extends Component {
 
-  roles = getDataMaanager(ROLES);
+  roles = getDataManager(ROLES);
 
   grid = null;
   wrapSettings = { wrapMode: "Content" };

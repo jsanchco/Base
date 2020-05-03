@@ -40,7 +40,7 @@
             return _mapper.Map<RoleViewModel>(role);
         }
 
-        public RoleViewModel AddRole(RoleViewModel newRoleViewModel)
+        public async Task<TransactionResult<RoleViewModel>> AddRoleAsync(RoleViewModel newRoleViewModel)
         {
             if (newRoleViewModel == null)
             {
@@ -48,22 +48,23 @@
             }
 
             var role = _mapper.Map<Role>(newRoleViewModel);
-            _roleRepository.Add(role);
-            newRoleViewModel = _mapper.Map<RoleViewModel>(role);
+            var result = await _roleRepository.AddAsync(role);
 
-            return newRoleViewModel;
+            return result.Result && result.Item != null
+                ? new TransactionResult<RoleViewModel> { Result = result.Result, Item = _mapper.Map<RoleViewModel>(result.Item) }
+                : new TransactionResult<RoleViewModel> { Result = result.Result, Item = null };
         }
 
-        public void UpdateRole(RoleViewModel roleViewModel)
+        public async Task<bool> UpdateRoleAsync(RoleViewModel roleViewModel)
         {
             var role = _mapper.Map<Role>(roleViewModel);
 
-            _roleRepository.Update(role);
+            return await _roleRepository.UpdateAsync(role);
         }
 
-        public void DeleteRole(int id)
+        public async Task<bool> DeleteRoleAsync(int id)
         {
-            _roleRepository.Delete(id);
+            return await _roleRepository.DeleteAsync(id);
         }
     }
 }

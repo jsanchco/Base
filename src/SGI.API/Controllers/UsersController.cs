@@ -74,15 +74,17 @@
         }
 
         [HttpPost]
-        public ActionResult AddUser([FromBody]UserViewModel userViewModel)
+        public async Task<ActionResult<UserViewModel>> AddUser(UserViewModel userViewModel)
         {
             try
             {
-                var result = _supervisor.AddUser(userViewModel);
+                var result = await _supervisor.AddUserAsync(userViewModel);
+                if (!result.Result || result.Item == null)
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Error in create User");
 
-                return CreatedAtRoute("GetUserById", 
-                    new { userId = result.id },
-                    result);
+                return CreatedAtRoute("GetUserById",
+                    new { userId = result.Item.id },
+                    result.Item);
             }
             catch (Exception ex)
             {
@@ -92,7 +94,7 @@
         }
 
         [HttpPut]
-        public ActionResult UpdateUser([FromBody]UserViewModel userViewModel)
+        public async Task<ActionResult> UpdateUser(int? userId, UserViewModel userViewModel)
         {
             try
             {
@@ -101,12 +103,18 @@
                     throw new ArgumentNullException(nameof(userViewModel));
                 }
 
-                if (!_supervisor.UserExists(userViewModel.id))
+                if (userId == null)
+                    userId = userViewModel.id;
+
+                if (!_supervisor.UserExists((int)userId))
                 {
                     return NotFound();
                 }
 
-                _supervisor.UpdateUser(userViewModel);
+                if (!await _supervisor.UpdateUserAsync(userViewModel))
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Error in update User");
+                }
 
                 return CreatedAtRoute("GetUserById",
                     new { userId = userViewModel.id },
@@ -122,7 +130,7 @@
         // DELETE: api/users/5
         [HttpDelete("{userId:int}")]
         //[Route("users/{userId:int}")]
-        public ActionResult Delete(int userId)
+        public async Task<ActionResult> Delete(int userId)
         {
             try
             {
@@ -131,7 +139,10 @@
                     return NotFound();
                 }
 
-                _supervisor.DeleteUser(userId);
+                if (!await _supervisor.DeleteUserAsync(userId))
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Error in remove User");
+                }
 
                 return NoContent();
             }

@@ -2,14 +2,15 @@
 {
     #region Using
 
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Logging;
     using Domain.Models;
     using Domain.Supervisor;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
+    using SGI.API.Helpers;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using Microsoft.AspNetCore.Authorization;
     using System.Threading.Tasks;
 
     #endregion
@@ -46,7 +47,23 @@
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Exception: ");
-                return StatusCode(500, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("{ids}/users")]
+        public async Task<ActionResult<QueryResult<RoleViewModel>>> GetUsersByRole([FromRoute]
+        [ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<int> ids)
+        {
+            try
+            {
+                return Ok(await _supervisor.GetUsersByRolesAsync(ids));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception: ");
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 
@@ -66,30 +83,32 @@
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Exception: ");
-                return StatusCode(500, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 
         [HttpPost]
-        public ActionResult AddRole([FromBody]RoleViewModel roleViewModel)
+        public async Task<ActionResult<RoleViewModel>> AddRole(RoleViewModel roleViewModel)
         {
             try
             {
-                var result = _supervisor.AddRole(roleViewModel);
+                var result = await _supervisor.AddRoleAsync(roleViewModel);
+                if (!result.Result || result.Item == null)
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Error in create Role");
 
                 return CreatedAtRoute("GetRoleById",
-                    new { roleId = result.id },
-                    result);
+                    new { roleId = result.Item.id },
+                    result.Item);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Exception: ");
-                return StatusCode(500, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 
         [HttpPut]
-        public ActionResult UpdateRole([FromBody]RoleViewModel roleViewModel)
+        public async Task<ActionResult> UpdateRole(int? roleId, RoleViewModel roleViewModel)
         {
             try
             {
@@ -98,12 +117,18 @@
                     throw new ArgumentNullException(nameof(roleViewModel));
                 }
 
-                if (!_supervisor.RoleExists(roleViewModel.id))
+                if (roleId == null)
+                    roleId = roleViewModel.id;
+
+                if (!_supervisor.RoleExists((int)roleId))
                 {
                     return NotFound();
                 }
 
-                _supervisor.UpdateRole(roleViewModel);
+                if (!await _supervisor.UpdateRoleAsync(roleViewModel))
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Error in update Role");
+                }
 
                 return CreatedAtRoute("GetRoleById",
                     new { roleId = roleViewModel.id },
@@ -112,14 +137,14 @@
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Exception: ");
-                return StatusCode(500, ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
             }
         }
 
         // DELETE: api/Role/5
         [HttpDelete("{roleId:int}")]
         //[Route("api/Roles/{roleId:int}")]
-        public ActionResult Delete(int roleId)
+        public async Task<ActionResult> Delete(int roleId)
         {
             try
             {
@@ -128,14 +153,17 @@
                     return NotFound();
                 }
 
-                _supervisor.DeleteRole(roleId);
+                if (!await _supervisor.DeleteRoleAsync(roleId))
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Error in remove Role");
+                }
 
                 return NoContent();
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Exception: ");
-                return StatusCode(500, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
     }

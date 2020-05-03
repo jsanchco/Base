@@ -5,6 +5,7 @@
     using Domain.Entities;
     using Domain.Repositories;
     using Microsoft.EntityFrameworkCore;
+    using SGI.Domain.Models;
     using System;
     using System.Linq;
     using System.Threading.Tasks;
@@ -59,24 +60,23 @@
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public Role Add(Role newRole)
+        public async Task<TransactionResult<Role>> AddAsync(Role newRole)
         {
             _context.Roles.Add(newRole);
-            _context.SaveChanges();
-            return newRole;
+            return new TransactionResult<Role> { Item = newRole, Result = await _context.SaveChangesAsync() > 0 };
         }
 
-        public void Update(Role role)
+        public async Task<bool> UpdateAsync(Role role)
         {
             _context.Roles.Update(role);
-            _context.SaveChanges();
+            return (await _context.SaveChangesAsync()) > 0;
         }
 
-        public void Delete(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
             var toRemove = _context.Roles.Find(id);
             _context.Roles.Remove(toRemove);
-            _context.SaveChanges();
+            return (await _context.SaveChangesAsync()) > 0;
         }
     }
 }

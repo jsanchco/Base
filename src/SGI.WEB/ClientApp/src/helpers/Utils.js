@@ -100,7 +100,7 @@ export const getTextError = status => {
   }
 }
 
-export const getDataMaanager = urlApi => {
+export const getDataManager = urlApi => {
   return (
     new DataManager({
       adaptor: new WebApiAdaptor(),

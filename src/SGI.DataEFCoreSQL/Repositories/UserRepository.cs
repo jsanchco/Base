@@ -11,6 +11,7 @@
     using System.Linq;
     using Domain.Helpers;
     using System;
+    using SGI.Domain.Models;
 
     #endregion
 
@@ -48,6 +49,13 @@
                 .Include(x => x.Role);
         }
 
+        public IQueryable<User> GetByRoles(IEnumerable<int> ids)
+        {
+            return _context.Users
+                .Where(x => ids.Contains(x.RoleId))
+                .Include(x => x.Role);
+        }
+
         public User GetById(int id)
         {
             return _context.Users
@@ -62,24 +70,23 @@
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public User Add(User newUser)
+        public async Task<TransactionResult<User>> AddAsync(User newUser)
         {
             _context.Users.Add(newUser);
-            _context.SaveChanges();
-            return newUser;
+            return new TransactionResult<User> { Item = newUser, Result = await _context.SaveChangesAsync() > 0 };
         }
 
-        public void Update(User user)
+        public async Task<bool> UpdateAsync(User user)
         {
             _context.Users.Update(user);
-            _context.SaveChanges();
+            return (await _context.SaveChangesAsync()) > 0;
         }
 
-        public void Delete(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
             var toRemove = _context.Users.Find(id);
             _context.Users.Remove(toRemove);
-            _context.SaveChanges();
+            return (await _context.SaveChangesAsync()) > 0;
         }
     }
 }
