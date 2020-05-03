@@ -2,6 +2,8 @@
 {
     #region Using
 
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using SGI.Domain.Helpers;
@@ -10,7 +12,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Microsoft.AspNetCore.Authorization;
 
     #endregion
 
@@ -43,13 +44,12 @@
                 var orderBy = Convert.ToString(queryString["$orderby"]);
                 var filter = ((string)queryString["$filter"]).GetSearcher();
 
-                var result = _supervisor.GetAllUsers(skip, take, orderBy, filter);
-                return Ok(new { Items = result.ToList(), Count = result.Count() });
+                return Ok(_supervisor.GetAllUsers(skip, take, orderBy, filter));
             }
             catch(Exception ex)
             {
                 _logger.LogError(ex, "Exception: ");
-                return StatusCode(500, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 
@@ -69,7 +69,7 @@
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Exception: ");
-                return StatusCode(500, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 
@@ -87,7 +87,7 @@
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Exception: ");
-                return StatusCode(500, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 
@@ -115,7 +115,7 @@
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Exception: ");
-                return StatusCode(500, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 
@@ -138,7 +138,7 @@
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Exception: ");
-                return StatusCode(500, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
     }
