@@ -2,12 +2,11 @@
 {
     #region Using
 
-    using System.Collections.Generic;
-    using System.Linq;
     using Domain.Entities;
     using Domain.Repositories;
     using Microsoft.EntityFrameworkCore;
     using System;
+    using System.Linq;
 
     #endregion
 
@@ -39,11 +38,10 @@
             return GetById(id) != null;
         }
 
-        public List<Role> GetAll()
+        public IQueryable<Role> GetAll()
         {
             return _context.Roles
-                .Include(x => x.Users)
-                .ToList();
+                .Include(x => x.Users);
         }
 
         public Role GetById(int id)

@@ -4,14 +4,14 @@
 
     using SGI.Domain.Entities;
     using System;
-    using System.Collections.Generic;
+    using System.Linq;
 
     #endregion
 
     public interface IRoleRepository : IDisposable
     {
         bool RoleExists(int id);
-        List<Role> GetAll();
+        IQueryable<Role> GetAll();
         Role GetById(int id);
         Role Add(Role newRole);
         void Update(Role role);

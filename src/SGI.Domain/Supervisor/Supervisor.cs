@@ -5,6 +5,9 @@
     using Repositories;
     using AutoMapper;
     using System;
+    using System.Threading.Tasks;
+    using System.Collections.Generic;
+    using SGI.Domain.Models;
 
     #endregion
 

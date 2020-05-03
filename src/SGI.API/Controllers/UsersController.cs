@@ -37,7 +37,6 @@
         {
             try
             {
-                //throw new Exception("Custom exception");
                 var queryString = Request.Query;
                 var skip = Convert.ToInt32(queryString["$skip"]);
                 var take = Convert.ToInt32(queryString["$top"]);

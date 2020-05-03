@@ -2,11 +2,13 @@
 {
     #region Using
 
+    using Entities;
+    using Microsoft.EntityFrameworkCore;
+    using SGI.Domain.Models;
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Entities;
-    using SGI.Domain.Models;
+    using System.Threading.Tasks;
 
     #endregion
 
@@ -17,11 +19,19 @@
             return _roleRepository.RoleExists(id);
         }
 
-        public List<RoleViewModel> GetAllRoles()
+        public async Task<QueryResult<RoleViewModel>> GetAllRoles(int skip, int take)
         {
             var roles = _roleRepository.GetAll();
-            var result = _mapper.Map<IEnumerable<RoleViewModel>>(roles);
-            return result.ToList();
+            var count = roles.Count();
+            if (skip != 0)
+                roles = roles.Skip(skip);
+
+            if (take != 0)
+                roles = roles.Take(take);
+
+            var result = _mapper.Map<List<RoleViewModel>>(await roles.ToListAsync());
+
+            return new QueryResult<RoleViewModel> { Items = result, Count= count};
         }
 
         public RoleViewModel GetRoleById(int id)

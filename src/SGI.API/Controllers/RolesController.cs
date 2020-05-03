@@ -10,6 +10,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using Microsoft.AspNetCore.Authorization;
+    using System.Threading.Tasks;
 
     #endregion
 
@@ -32,12 +33,17 @@
 
         // GET: api/Roles
         [HttpGet]
-        public ActionResult<IEnumerable<RoleViewModel>> GetRoles()
+        public async Task<ActionResult<QueryResult<RoleViewModel>>> GetRoles()
         {
             try
             {
-                var result = _supervisor.GetAllRoles();
-                return Ok(new { Items = result.ToList(), Count = result.Count() });
+                var queryString = Request.Query;
+                var skip = Convert.ToInt32(queryString["$skip"]);
+                var take = Convert.ToInt32(queryString["$top"]);
+
+                var result = await _supervisor.GetAllRoles(skip, take);
+
+                return Ok(result);
             }
             catch (Exception ex)
             {

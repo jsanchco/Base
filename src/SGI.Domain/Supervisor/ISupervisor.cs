@@ -32,7 +32,7 @@
         #region Role
 
         bool RoleExists(int id);
-        List<RoleViewModel> GetAllRoles();
+        Task <QueryResult<RoleViewModel>> GetAllRoles(int skip, int take);
         RoleViewModel GetRoleById(int id);
         RoleViewModel AddRole(RoleViewModel newRoleViewModel);
         void UpdateRole(RoleViewModel roleViewModel);
