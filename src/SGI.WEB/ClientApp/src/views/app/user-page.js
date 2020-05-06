@@ -10,6 +10,7 @@ import {
   hideSpinner,
 } from "@syncfusion/ej2-popups";
 import { DatePickerComponent } from "@syncfusion/ej2-react-calendars";
+import { NumericTextBoxComponent } from '@syncfusion/ej2-react-inputs';
 import axios from "../../helpers/axios";
 import { catchError } from "../../helpers/Utils";
 import { NotificationManager } from "../../components/common/react-notifications";
@@ -24,11 +25,13 @@ export default class UserPage extends Component {
       roleId: null,
       name: null,
       surname: null,
-      birthdate: null
+      birthdate: null,
+      salary: null
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleDate = this.handleDate.bind(this);
+    this.handleSalary = this.handleSalary.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.getUser = this.getUser.bind(this);
     this.getPatchData = this.getPatchData.bind(this);
@@ -50,6 +53,7 @@ export default class UserPage extends Component {
           name: result.data.name,
           surname: result.data.surname,
           birthdate: result.data.birthdate,
+          salary: result.data.salary,
           roleId: result.roleId
         })
 
@@ -76,6 +80,10 @@ export default class UserPage extends Component {
     this.setState({
       [name]: event.value,
     });
+  }
+
+  handleSalary(args) {
+    this.setState({ salary: args.value });
   }
 
   handleSubmit(e) {
@@ -138,6 +146,7 @@ export default class UserPage extends Component {
       roleId: this.state.roleId,
       name: user.name,
       surname: user.surname,
+      salary: user.salary,
       birthdate: user.birthdate
     };
   }
@@ -172,11 +181,11 @@ export default class UserPage extends Component {
 
                 <Formik
                   onSubmit={this.handleSubmit}
-                  >
+                >
                   {() => (
                     <Form className="av-tooltip tooltip-label-right">
                       <Row>
-                        <Colxx xxs="4">
+                        <Colxx xxs="3">
                           <FormGroup>
                             <Label><IntlMessages id="user-page.name" /></Label>
                             <Field
@@ -189,7 +198,7 @@ export default class UserPage extends Component {
                             />
                           </FormGroup>
                         </Colxx>
-                        <Colxx xxs="4">
+                        <Colxx xxs="3">
                           <FormGroup>
                             <Label><IntlMessages id="user-page.surname" /></Label>
                             <Field
@@ -203,7 +212,7 @@ export default class UserPage extends Component {
                             />
                           </FormGroup>
                         </Colxx>
-                        <Colxx xxs="4">
+                        <Colxx xxs="3">
                           <FormGroup>
                             <Label><IntlMessages id="user-page.birthdate" /></Label>
                             <DatePickerComponent
@@ -215,6 +224,21 @@ export default class UserPage extends Component {
                               change={this.handleDate}
                               style={{ marginTop: "10px" }}
                               locale="es"
+                            />
+                          </FormGroup>
+                        </Colxx>
+                        <Colxx xxs="3">
+                          <FormGroup>
+                            <Label><IntlMessages id="user-page.salary" /></Label>
+                            <NumericTextBoxComponent
+                              id="salary"
+                              name="salary"
+                              locale="es"
+                              currency="EUR"
+                              format="c2"
+                              style={{ marginTop: "5px" }}
+                              value={this.state.salary || ""}
+                              change={this.handleSalary}
                             />
                           </FormGroup>
                         </Colxx>

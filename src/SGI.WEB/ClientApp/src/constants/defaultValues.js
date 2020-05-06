@@ -37,7 +37,7 @@ const dev = {
 };
 
 const prod = {
-  URL_API: "https://localhost:44325"
+  URL_API: "https://baseapiservice.azurewebsites.net"
 };
 
 export const config = process.env.NODE_ENV === "development" ? dev : prod;

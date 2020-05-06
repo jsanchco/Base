@@ -54,6 +54,7 @@ module.exports = {
  "user-page.name": "Name",
  "user-page.surname": "Surname",
  "user-page.birthdate": "Birthdate",
+ "user-page.salary": "Salary",
 
  /* Common */
  "common.save": "Save"

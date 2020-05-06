@@ -53,6 +53,7 @@ module.exports = {
   "user-page.name": "Nombre",
   "user-page.surname": "Apellidos",
   "user-page.birthdate": "Fecha de Nacimiento",
+  "user-page.salary": "Salario",
 
    /* Common */
  "common.save": "Guardar"

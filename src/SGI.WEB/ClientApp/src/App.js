@@ -15,16 +15,18 @@ import { getDirection } from './helpers/Utils';
 import "./App.scss";
 import data from "./locales/locale.json";
 
-import { loadCldr, L10n, setCulture } from "@syncfusion/ej2-base";
+import { loadCldr, L10n, setCulture, setCurrencyCode } from "@syncfusion/ej2-base";
 
 import gregorian from 'cldr-data/main/es/ca-gregorian.json';
 import numbers from 'cldr-data/main/es/numbers.json';
+import currencyData from 'cldr-data/main/es/currencies.json';
 import timeZoneNames from 'cldr-data/main/es/timeZoneNames.json';
 import numberingSystems from 'cldr-data/supplemental/numberingSystems.json';
 import weekData from 'cldr-data/supplemental/weekData.json';
 
-loadCldr(numberingSystems, gregorian, numbers, timeZoneNames, weekData);
+loadCldr(numberingSystems, currencyData, gregorian, numbers, timeZoneNames, weekData);
 setCulture("es");
+setCurrencyCode("EUR");
 L10n.load(data);
 
 const ViewMain = React.lazy(() =>

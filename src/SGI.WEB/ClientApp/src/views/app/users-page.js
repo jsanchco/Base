@@ -59,6 +59,14 @@ export default class UsersPage extends Component {
     };
     this.pageSettings = { pageCount: 10, pageSize: 10 };
     this.customAttributes = { class: "customcss" };
+    this.numericParams = {
+      params: {
+        decimals: 2,
+        format: "C",
+        validateDecimalOnType: true,
+        currency: "EUR"
+      }
+    };
 
     this.actionFailure = this.actionFailure.bind(this);
     this.actionComplete = this.actionComplete.bind(this);
@@ -200,6 +208,18 @@ export default class UsersPage extends Component {
                       editType="datepickeredit"
                       headerTextAlign="center"
                       textAlign="center"
+                      customAttributes={this.customAttributes}
+                    />
+                    <ColumnDirective 
+                      field="salary"
+                      headerText="Salario" 
+                      width="100" 
+                      format="C2"
+                      // currency="EUR"
+                      textAlign="Right"
+                      editType="numericedit"
+                      edit={this.numericParams}
+                      headerTextAlign="center"
                       customAttributes={this.customAttributes}
                     />
                     <ColumnDirective
