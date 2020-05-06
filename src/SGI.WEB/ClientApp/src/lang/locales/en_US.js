@@ -44,9 +44,17 @@ module.exports = {
   "menu.blank-page": "Blank Page",
   "menu.roles-page": "Roles",
   "menu.users-page": "Users",
+  "menu.user-page": "User",
 
  /* 04.Error Page */
  "pages.error-title": "Ooops... looks like an error occurred!",
  "pages.error-code": "Error code",
  "pages.go-back-home": "GO BACK HOME",
+
+ "user-page.name": "Name",
+ "user-page.surname": "Surname",
+ "user-page.birthdate": "Birthdate",
+
+ /* Common */
+ "common.save": "Save"
 };

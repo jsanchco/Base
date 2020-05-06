@@ -22,6 +22,10 @@ const UsersPage = React.lazy(() =>
   import(/* webpackChunkName: "viwes-blank-page" */ './users-page')
 );
 
+const UserPage = React.lazy(() =>
+  import(/* webpackChunkName: "viwes-blank-page" */ './user-page')
+);
+
 class App extends Component {
   render() {
     const { match } = this.props;
@@ -51,6 +55,10 @@ class App extends Component {
               <Route
                 path={`${match.url}/users-page`}
                 render={props => <UsersPage {...props} />}
+              />
+              <Route
+                path={`${match.url}/user-page/:id`}
+                render={props => <UserPage {...props} />}
               />
               <Redirect to="/error" />
             </Switch>

@@ -12,7 +12,7 @@
     "@syncfusion/ej2-react-navigations": "^18.1.45",
     "@syncfusion/ej2-react-popups": "^18.1.45",
     "availity-reactstrap-validation": "^2.0.4",
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "chart.js": "^2.7.2",
     "classnames": "2.2.6",
     "formik": "^1.5.1",
@@ -50,6 +50,7 @@
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
     "redux-saga": "^1.0.2",
+    "rfc6902": "^3.0.4",
     "sortablejs": "^1.6.1",
     "video.js": "^7.6.0",
     "yup": "^0.27.0"
@@ -70,6 +71,6 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "node-sass": "^4.12.0"
+    "node-sass": "^4.14.1"
   }
 }

@@ -42,10 +42,18 @@ module.exports = {
   "menu.docs": "Docs",
   "menu.blank-page": "Blank Page",
   "menu.roles-page": "Roles",
-  "menu.users-page": "Users",
+  "menu.users-page": "Usuarios",
+  "menu.user-page": "Usuario",
 
   /* 04.Error  */
   "pages.error-title": "Vaya, parece que ha ocurrido un error!",
   "pages.error-code": "Código de error",
-  "pages.go-back-home": "REGRESAR A INICIO"
+  "pages.go-back-home": "REGRESAR A INICIO",
+
+  "user-page.name": "Nombre",
+  "user-page.surname": "Apellidos",
+  "user-page.birthdate": "Fecha de Nacimiento",
+
+   /* Common */
+ "common.save": "Guardar"
 };

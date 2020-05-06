@@ -20,6 +20,20 @@
             return _userRepository.UserExists(id);
         }
 
+        public UserViewModel GetUserById(int id)
+        {
+            var result = _mapper.Map<UserViewModel>(_userRepository.GetById(id));
+
+            return result;
+        }
+
+        public UserPatch GetUserPatchById(int id)
+        {
+            var result = _mapper.Map<UserPatch>(_userRepository.GetById(id));
+
+            return result;
+        }
+
         public async Task<QueryResult<UserViewModel>> GetAllUsersAsync(int skip = 0, int take = 0, string orderBy = null, string filter = null)
         {
             var users = _userRepository.GetAll();
@@ -59,9 +73,9 @@
             if (take != 0)
                 users = users.Take(take);
 
-           var result = _mapper.Map<IEnumerable<UserViewModel>>(await users.ToListAsync());
+           var result = _mapper.Map<List<UserViewModel>>(await users.ToListAsync());
 
-            return new QueryResult<UserViewModel> { Items = result.ToList(), Count = count };
+            return new QueryResult<UserViewModel> { Items = result, Count = count };
         }
 
         public async Task<QueryResult<UserViewModel>> GetUsersByRolesAsync(IEnumerable<int> ids)
@@ -84,6 +98,11 @@
                 throw new ArgumentNullException(nameof(newUserViewModel));
             }
 
+            if (newUserViewModel.roleId == 0)
+            {
+                throw new ArgumentNullException(nameof(newUserViewModel));
+            }
+
             var user = _mapper.Map<User>(newUserViewModel);
             var result = await _userRepository.AddAsync(user);
 
@@ -94,6 +113,11 @@
 
         public async Task<bool> UpdateUserAsync(UserViewModel userViewModel)
         {
+            if (userViewModel.roleId == 0)
+            {
+                throw new Exception("El usuario debe tener un Role definido");
+            }
+
             var user = _mapper.Map<User>(userViewModel);
 
             return await _userRepository.UpdateAsync(user);

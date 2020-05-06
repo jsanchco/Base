@@ -2,8 +2,10 @@
 {
     #region Using
 
+    using AutoMapper;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.JsonPatch;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using SGI.Domain.Helpers;
@@ -20,16 +22,20 @@
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly ISupervisor _supervisor;
+        private readonly ISupervisor _supervisor;       
         private readonly ILogger<UsersController> _logger;
+        private readonly IMapper _mapper;
 
-        public UsersController(ILogger<UsersController> logger, ISupervisor supervisor)
+        public UsersController(ILogger<UsersController> logger, ISupervisor supervisor, IMapper mapper)
         {
             _logger = logger ??
                 throw new ArgumentNullException(nameof(logger));
 
             _supervisor = supervisor ?? 
                 throw new ArgumentNullException(nameof(supervisor));
+
+            _mapper = mapper ??
+                throw new ArgumentNullException(nameof(mapper));
         }
 
         [HttpGet]
@@ -91,6 +97,7 @@
             }
         }
 
+
         [HttpPut]
         public async Task<ActionResult> UpdateUser(int? userId, UserViewModel userViewModel)
         {
@@ -116,6 +123,40 @@
 
                 return CreatedAtRoute("GetUserById",
                     new { userId = userViewModel.id },
+                    userViewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception: ");
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpPatch]
+        public async Task<ActionResult> PartiallyUpdateUser(int? userId, JsonPatchDocument<UserPatch> patchDocument)
+        {
+            try
+            {
+                if (patchDocument == null)
+                    throw new ArgumentNullException(nameof(patchDocument));
+
+                if (userId == null)
+                    throw new Exception("Identificador de usuario invalido");
+
+                var userPatch = _supervisor.GetUserPatchById((int)userId);
+                if (userPatch == null)
+                    return NotFound();
+
+                patchDocument.ApplyTo(userPatch, ModelState);
+                var userViewModel = _mapper.Map<UserViewModel>(userPatch);
+
+                if (!await _supervisor.UpdateUserAsync(userViewModel))
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Error in update User");
+                }
+
+                return CreatedAtRoute("GetUserById",
+                    new { userId },
                     userViewModel);
             }
             catch (Exception ex)

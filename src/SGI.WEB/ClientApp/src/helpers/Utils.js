@@ -1,6 +1,7 @@
 import { defaultDirection } from "../constants/defaultValues";
 import { DataManager, WebApiAdaptor } from "@syncfusion/ej2-data";
 import { config } from "../constants/defaultValues";
+import { NotificationManager } from "../components/common/react-notifications";
 
 export const mapOrder = (array, order, key) => {
   array.sort(function (a, b) {
@@ -81,7 +82,7 @@ export const getError = (args) => {
     };
   }
 
-  return { status: -1, text: "Unknown" }
+  return { status: -1, text: "Error en la conexión" }
 };
 
 export const getTextError = status => {
@@ -96,7 +97,7 @@ export const getTextError = status => {
       return "Not Acceptable";
 
     default:
-      return "Unknown";
+      return "Error en la conexión";
   }
 }
 
@@ -109,4 +110,29 @@ export const getDataManager = urlApi => {
     })
   );
 };
+
+export const catchError = error => {
+  let status = -1;
+  let message = error.message;
+  if (error.response && error.response.status) {
+    status = error.response.status;
+  }
+  if (error.response && error.response.data) {
+    if (error.response.data.title) {
+      message = error.response.data.title;
+    } else {
+      message = error.response.data.toString();
+    }
+  }
+
+  NotificationManager.error(
+    message,
+    `Status: ${status}`,
+    3000,
+    null,
+    null,
+    "filled"
+  );
+}
+
 

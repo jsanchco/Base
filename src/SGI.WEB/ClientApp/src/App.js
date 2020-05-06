@@ -28,7 +28,6 @@ const ViewUser = React.lazy(() =>
 );
 
 const AuthRoute = ({ component: Component, authUser, ...rest }) => {
-  console.log("authUser ->", authUser);
   return (
     <Route
       {...rest}

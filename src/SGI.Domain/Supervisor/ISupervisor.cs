@@ -21,6 +21,8 @@
         #region User
 
         bool UserExists(int id);
+        UserViewModel GetUserById(int id);
+        UserPatch GetUserPatchById(int id);
         Task<QueryResult<UserViewModel>> GetAllUsersAsync(int skip = 0, int take = 0, string orderBy= null, string filter = null);
         Task<QueryResult<UserViewModel>> GetUsersByRolesAsync(IEnumerable<int> ids);
         Task<UserViewModel> GetUserByIdAsync(int id);

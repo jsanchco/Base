@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Row, Card, CardBody, CardTitle, Table } from "reactstrap";
+import { Row, Card, CardBody, CardTitle } from "reactstrap";
 import IntlMessages from "../../helpers/IntlMessages";
 import { Colxx, Separator } from "../../components/common/CustomBootstrap";
 import Breadcrumb from "../../containers/navs/Breadcrumb";
@@ -14,8 +14,7 @@ import {
   Toolbar,
   Page,
   ForeignKey,
-  Group,
-  Sort,
+  Group
 } from "@syncfusion/ej2-react-grids";
 import { L10n } from "@syncfusion/ej2-base";
 import { NotificationManager } from "../../components/common/react-notifications";

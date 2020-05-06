@@ -17,7 +17,6 @@ import {
   Group,
   Sort,
 } from "@syncfusion/ej2-react-grids";
-import { Query } from "@syncfusion/ej2-data";
 import { L10n } from "@syncfusion/ej2-base";
 import { NotificationManager } from "../../components/common/react-notifications";
 import { getError } from "../../helpers/Utils";
@@ -123,11 +122,6 @@ export default class UsersPage extends Component {
         args.data.birthDate = date;
       }
     }
-    // if (args.requestType === "beginEdit") {
-    //   this.grid.query = [];
-    //   this.grid.query = new Query().addParams("id", args.rowData.id);
-    //   // console.log("this.grid ->", this.grid);
-    // }
   }
 
   clickHandler(args) {
@@ -135,17 +129,20 @@ export default class UsersPage extends Component {
       const { rowSelected } = this.state;
       if (rowSelected !== null) {
         this.props.history.push({
-          pathname: "/employees/detailemployee",
+          pathname: `/app/user-page/${rowSelected.id}`,
           state: {
             user: rowSelected,
           },
         });
       } else {
-        this.props.showMessage({
-          statusText: "Debes seleccionar un usuario",
-          responseText: "Debes seleccionar un usuario",
-          type: "danger",
-        });
+        NotificationManager.error(
+          "Debes seleccionar un Usuario",
+          `Status: -1`,
+          3000,
+          null,
+          null,
+          "filled"
+        );
       }
     }
   }
