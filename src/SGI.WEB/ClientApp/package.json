@@ -15,6 +15,7 @@
     "axios": "^0.18.1",
     "chart.js": "^2.7.2",
     "classnames": "2.2.6",
+    "cldr-data": "^36.0.0",
     "formik": "^1.5.1",
     "moment": "2.22.2",
     "mousetrap": "^1.6.3",

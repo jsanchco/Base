@@ -13,6 +13,19 @@ import NotificationContainer from './components/common/react-notifications/Notif
 import { isMultiColorActive } from './constants/defaultValues';
 import { getDirection } from './helpers/Utils';
 import "./App.scss";
+import data from "./locales/locale.json";
+
+import { loadCldr, L10n, setCulture } from "@syncfusion/ej2-base";
+
+import gregorian from 'cldr-data/main/es/ca-gregorian.json';
+import numbers from 'cldr-data/main/es/numbers.json';
+import timeZoneNames from 'cldr-data/main/es/timeZoneNames.json';
+import numberingSystems from 'cldr-data/supplemental/numberingSystems.json';
+import weekData from 'cldr-data/supplemental/weekData.json';
+
+loadCldr(numberingSystems, gregorian, numbers, timeZoneNames, weekData);
+setCulture("es");
+L10n.load(data);
 
 const ViewMain = React.lazy(() =>
   import(/* webpackChunkName: "views" */ './views')

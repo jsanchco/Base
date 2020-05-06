@@ -3,7 +3,6 @@ import { Row, Card, CardBody, CardTitle } from "reactstrap";
 import IntlMessages from "../../helpers/IntlMessages";
 import { Colxx, Separator } from "../../components/common/CustomBootstrap";
 import Breadcrumb from "../../containers/navs/Breadcrumb";
-import data from "../../locales/locale.json";
 import { USERS, ROLES } from "../../constants/defaultValues";
 import {
   ColumnDirective,
@@ -17,12 +16,9 @@ import {
   Group,
   Sort,
 } from "@syncfusion/ej2-react-grids";
-import { L10n } from "@syncfusion/ej2-base";
 import { NotificationManager } from "../../components/common/react-notifications";
 import { getError } from "../../helpers/Utils";
 import { getDataManager } from "../../helpers/Utils";
-
-L10n.load(data);
 
 export default class UsersPage extends Component {
 
@@ -66,10 +62,8 @@ export default class UsersPage extends Component {
 
     this.actionFailure = this.actionFailure.bind(this);
     this.actionComplete = this.actionComplete.bind(this);
-    this.actionBegin = this.actionBegin.bind(this);
     this.clickHandler = this.clickHandler.bind(this);
     this.rowSelected = this.rowSelected.bind(this);
-    this.formatDate = this.formatDate.bind(this);
 
     this.format = { type: "dateTime", format: "dd/MM/yyyy" };
   }
@@ -111,19 +105,6 @@ export default class UsersPage extends Component {
     }
   }
 
-  actionBegin(args) {
-    if (args.requestType === "save") {
-      if (
-        args.data.birthDate !== null &&
-        args.data.birthDate !== "" &&
-        args.data.birthDate !== undefined
-      ) {
-        let date = this.formatDate(args.data.birthDate);
-        args.data.birthDate = date;
-      }
-    }
-  }
-
   clickHandler(args) {
     if (args.item.id === "Details") {
       const { rowSelected } = this.state;
@@ -144,24 +125,6 @@ export default class UsersPage extends Component {
           "filled"
         );
       }
-    }
-  }
-
-  formatDate(args) {
-    if (args === null || args === "") {
-      return "";
-    }
-
-    let day = args.getDate();
-    if (day < 10) day = "0" + day;
-
-    const month = args.getMonth() + 1;
-    const year = args.getFullYear();
-
-    if (month < 10) {
-      return `${day}/0${month}/${year}`;
-    } else {
-      return `${day}/${month}/${year}`;
     }
   }
 
@@ -189,7 +152,7 @@ export default class UsersPage extends Component {
 
                 <GridComponent
                   dataSource={this.users}
-                  locale="es-US"
+                  locale="es"
                   allowPaging={true}
                   pageSettings={this.pageSettings}
                   toolbar={this.toolbarOptions}
@@ -197,7 +160,6 @@ export default class UsersPage extends Component {
                   editSettings={this.editSettings}
                   actionFailure={this.actionFailure}
                   actionComplete={this.actionComplete}
-                  actionBegin={this.actionBegin}
                   allowGrouping={true}
                   rowSelected={this.rowSelected}
                   ref={(g) => (this.grid = g)}

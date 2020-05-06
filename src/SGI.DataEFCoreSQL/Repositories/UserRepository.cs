@@ -60,6 +60,7 @@
         {
             return _context.Users
                 .Include(x => x.Role)
+                .AsNoTracking()
                 .FirstOrDefault(x => x.Id == id);
         }
 

@@ -12,7 +12,7 @@ import {
 import { DatePickerComponent } from "@syncfusion/ej2-react-calendars";
 import axios from "../../helpers/axios";
 import { catchError } from "../../helpers/Utils";
-import { applyPatch } from 'rfc6902';
+import { NotificationManager } from "../../components/common/react-notifications";
 
 export default class UserPage extends Component {
   constructor(props) {
@@ -21,15 +21,16 @@ export default class UserPage extends Component {
     this.state = {
       user: null,
       userId: this.props.match.params.id,
+      roleId: null,
       name: null,
       surname: null,
       birthdate: null
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleDate = this.handleDate.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.getOldUser = this.getOldUser.bind(this);
-    this.getNewUser = this.getNewUser.bind(this);
+    this.getUser = this.getUser.bind(this);
     this.getPatchData = this.getPatchData.bind(this);
   }
 
@@ -48,7 +49,8 @@ export default class UserPage extends Component {
           user: result.data,
           name: result.data.name,
           surname: result.data.surname,
-          birthdate: this.parseDate(result.data.birthdate)
+          birthdate: result.data.birthdate,
+          roleId: result.roleId
         })
 
         hideSpinner(element);
@@ -60,17 +62,6 @@ export default class UserPage extends Component {
       });
   }
 
-  parseDate(args) {
-    if (args === null || args === undefined || args === "") {
-      return "";
-    }
-
-    return `${args.substring(3, 5)}/${args.substring(0, 2)}/${args.substring(
-      6,
-      10
-    )}`;
-  }
-
   handleInputChange(event) {
     const target = event.target;
     const name = target.name;
@@ -80,7 +71,14 @@ export default class UserPage extends Component {
     });
   }
 
-  handleSubmit() {
+  handleDate(event) {
+    const name = event.element.name;
+    this.setState({
+      [name]: event.value,
+    });
+  }
+
+  handleSubmit(e) {
     const element = document.getElementById("user-card");
 
     createSpinner({
@@ -88,18 +86,44 @@ export default class UserPage extends Component {
     });
     showSpinner(element);
 
-    debugger;
     const url = `/api/Users`;
-    const user = this.getPatchData();
+    const oldUser = this.getUser(this.state.user);
+    const newUser = this.getUser(this.state);
+    const userPatch = this.getPatchData(oldUser, newUser);
+    if (userPatch.length === 0) {
+      NotificationManager.error(
+        "Los datos coinciden, debes cambiar algún valor para poder Guardar",
+        "",
+        3000,
+        null,
+        null,
+        "filled"
+      );
+      hideSpinner(element);
+      return;
+    }
+
     const userId = this.state.userId;
     axios.patch(
-      url, 
-      user, 
-      { params: {
-        userId
-      }})
+      url,
+      userPatch,
+      {
+        params: {
+          userId
+        }
+      })
       .then(result => {
-        console.log("result ->", result);
+        if (result.status === 201) {
+          NotificationManager.success(
+            "Operación realizada con éxito",
+            "",
+            3000,
+            null,
+            null,
+            "filled"
+          );
+          this.setState({ user: result.data });
+        }
         hideSpinner(element);
       })
       .catch(error => {
@@ -108,31 +132,19 @@ export default class UserPage extends Component {
       });
   }
 
-  getOldUser() {
-    debugger;
+  getUser(user) {
     return {
       id: this.state.userId,
-      name: this.state.user.name,
-      surname: this.state.user.surname,
-      birthdate: this.state.user.birthdate,
-      roleId: this.state.user.roleId
+      roleId: this.state.roleId,
+      name: user.name,
+      surname: user.surname,
+      birthdate: user.birthdate
     };
   }
 
-  getNewUser() {
-    debugger;
-    return {
-      id: this.state.userId,
-      name: this.state.name,
-      surname: this.state.surname,
-      birthdate: this.parseDate(this.state.birthdate),
-      roleId: this.state.user.roleId
-    };
-  }
-
-  getPatchData() {
+  getPatchData(oldUser, newUser) {
     var rfc6902 = require("rfc6902");
-    const operations = rfc6902.createPatch(this.getOldUser(), this.getNewUser());
+    const operations = rfc6902.createPatch(oldUser, newUser);
 
     return operations;
   }
@@ -159,7 +171,8 @@ export default class UserPage extends Component {
                 </CardTitle>
 
                 <Formik
-                  onSubmit={this.handleSubmit}>
+                  onSubmit={this.handleSubmit}
+                  >
                   {() => (
                     <Form className="av-tooltip tooltip-label-right">
                       <Row>
@@ -183,6 +196,7 @@ export default class UserPage extends Component {
                               className="form-control"
                               name="surname"
                               id="surname"
+                              locale="es-US"
                               required
                               value={this.state.surname || ""}
                               onChange={this.handleInputChange}
@@ -198,14 +212,15 @@ export default class UserPage extends Component {
                               required
                               format="dd/MM/yyyy"
                               value={this.state.birthdate || ""}
-                              onChange={this.handleInputChange}
+                              change={this.handleDate}
                               style={{ marginTop: "10px" }}
+                              locale="es"
                             />
                           </FormGroup>
                         </Colxx>
                       </Row>
                       <Row style={{ marginTop: "10px" }}>
-                        <Button color="primary" type="submit">
+                        <Button color="primary" type="submit" >
                           <IntlMessages id="common.save" />
                         </Button>
                       </Row>

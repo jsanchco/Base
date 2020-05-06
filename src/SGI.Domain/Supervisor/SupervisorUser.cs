@@ -119,6 +119,8 @@
             }
 
             var user = _mapper.Map<User>(userViewModel);
+            var userFind = _userRepository.GetById(user.Id);
+            user.Password = userFind.Password;
 
             return await _userRepository.UpdateAsync(user);
         }

@@ -15,18 +15,12 @@
         {
             CreateMap<User, UserViewModel>()
                 .ForMember(
-                    dest => dest.birthdate,
-                    opt => opt.MapFrom(src => src.Birthdate.ToStringEU()))
-                .ForMember(
                     dest => dest.roleName,
                     opt => opt.MapFrom(src => src.Role.Name));
 
             CreateMap<UserViewModel, User>();
 
-            CreateMap<User, UserPatch>()
-                .ForMember(
-                    dest => dest.birthdate,
-                    opt => opt.MapFrom(src => src.Birthdate.ToStringEU()));
+            CreateMap<User, UserPatch>();
 
             CreateMap<UserPatch, UserViewModel>();
         }
