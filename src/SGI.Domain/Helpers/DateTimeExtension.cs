@@ -24,12 +24,9 @@
             return ((DateTime)dateTime).ToString("MM/dd/yyyy");
         }
 
-        public static DateTime? RemoveTime(this DateTime? dateTime)
+        public static DateTime RemoveTime(this DateTime dateTime)
         {
-            if (dateTime == null)
-                return null;
-
-            var date = ((DateTime)dateTime).ToLocalTime();
+            var date = dateTime.ToLocalTime();
             return new DateTime(date.Year, date.Month, date.Day);
         }
     }

@@ -18,7 +18,10 @@
                     dest => dest.roleName,
                     opt => opt.MapFrom(src => src.Role.Name));
 
-            CreateMap<UserViewModel, User>();
+            CreateMap<UserViewModel, User>()
+                 .ForMember(
+                    dest => dest.Birthdate,
+                    opt => opt.MapFrom(src => src.birthdate.RemoveTime()));
 
             CreateMap<User, UserPatch>();
 
