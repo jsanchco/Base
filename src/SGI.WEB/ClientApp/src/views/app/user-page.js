@@ -26,7 +26,7 @@ export default class UserPage extends Component {
       name: null,
       surname: null,
       birthdate: null,
-      salary: null
+      salary: 0
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -48,6 +48,7 @@ export default class UserPage extends Component {
     const url = `/api/Users/${this.state.userId}`
     axios.get(url)
       .then(result => {
+        debugger;
         this.setState({
           user: result.data,
           name: result.data.name,
@@ -163,6 +164,7 @@ export default class UserPage extends Component {
       `${this.state.user.name} ${this.state.user.surname}` :
       "";
 
+    console.log("salary ->", this.state.salary);
     return (
       <Fragment>
         <Row>
@@ -237,7 +239,7 @@ export default class UserPage extends Component {
                               currency="EUR"
                               format="c2"
                               style={{ marginTop: "5px" }}
-                              value={this.state.salary || ""}
+                              value={this.state.salary}
                               change={this.handleSalary}
                             />
                           </FormGroup>
