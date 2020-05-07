@@ -15,15 +15,15 @@ const BlankPage = React.lazy(() =>
 );
 
 const RolesPage = React.lazy(() =>
-  import(/* webpackChunkName: "viwes-blank-page" */ './roles-page')
+  import('./roles/roles')
 );
 
 const UsersPage = React.lazy(() =>
-  import(/* webpackChunkName: "viwes-blank-page" */ './users-page')
+  import('./users/users')
 );
 
 const UserPage = React.lazy(() =>
-  import(/* webpackChunkName: "viwes-blank-page" */ './user-page')
+  import('./users/user-basic-data')
 );
 
 class App extends Component {

@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from "react";
 import { Row, Card, CardBody, CardTitle, FormGroup, Label, Button } from "reactstrap";
 import { Formik, Form, Field } from "formik";
-import IntlMessages from "../../helpers/IntlMessages";
-import { Colxx, Separator } from "../../components/common/CustomBootstrap";
-import Breadcrumb from "../../containers/navs/Breadcrumb";
+import IntlMessages from "../../../helpers/IntlMessages";
+import { Colxx, Separator } from "../../../components/common/CustomBootstrap";
+import Breadcrumb from "../../../containers/navs/Breadcrumb";
 import {
   createSpinner,
   showSpinner,
@@ -11,11 +11,11 @@ import {
 } from "@syncfusion/ej2-popups";
 import { DatePickerComponent } from "@syncfusion/ej2-react-calendars";
 import { NumericTextBoxComponent } from '@syncfusion/ej2-react-inputs';
-import axios from "../../helpers/axios";
-import { catchError } from "../../helpers/Utils";
-import { NotificationManager } from "../../components/common/react-notifications";
+import axios from "../../../helpers/axios";
+import { catchError } from "../../../helpers/Utils";
+import { NotificationManager } from "../../../components/common/react-notifications";
 
-export default class UserPage extends Component {
+export default class UserBasicData extends Component {
   constructor(props) {
     super(props);
 
@@ -23,6 +23,7 @@ export default class UserPage extends Component {
       user: null,
       userId: this.props.match.params.id,
       roleId: null,
+      username: null,
       name: null,
       surname: null,
       birthdate: null,
@@ -48,14 +49,14 @@ export default class UserPage extends Component {
     const url = `/api/Users/${this.state.userId}`
     axios.get(url)
       .then(result => {
-        debugger;
         this.setState({
           user: result.data,
           name: result.data.name,
           surname: result.data.surname,
-          birthdate: result.data.birthdate,
+          username: result.data.username,
+          birthdate: result.data.birthdate,  
           salary: result.data.salary,
-          roleId: result.roleId
+          roleId: result.data.roleId
         })
 
         hideSpinner(element);
@@ -145,16 +146,22 @@ export default class UserPage extends Component {
     return {
       id: this.state.userId,
       roleId: this.state.roleId,
+      username: this.state.username,
       name: user.name,
       surname: user.surname,
       salary: user.salary,
-      birthdate: user.birthdate
+      birthdate: Date.parse(user.birthdate)
     };
   }
 
   getPatchData(oldUser, newUser) {
     var rfc6902 = require("rfc6902");
     const operations = rfc6902.createPatch(oldUser, newUser);
+    operations.forEach(item => {
+      if (item.path === "/birthdate") {
+        item.value = new Date(item.value);
+      }
+    });
 
     return operations;
   }
@@ -164,7 +171,6 @@ export default class UserPage extends Component {
       `${this.state.user.name} ${this.state.user.surname}` :
       "";
 
-    console.log("salary ->", this.state.salary);
     return (
       <Fragment>
         <Row>
@@ -225,6 +231,7 @@ export default class UserPage extends Component {
                               value={this.state.birthdate || ""}
                               change={this.handleDate}
                               style={{ marginTop: "10px" }}
+                              timeZone={false}
                               locale="es"
                             />
                           </FormGroup>

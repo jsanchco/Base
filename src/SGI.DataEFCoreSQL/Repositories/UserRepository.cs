@@ -73,12 +73,14 @@
 
         public async Task<TransactionResult<User>> AddAsync(User newUser)
         {
+            newUser.Birthdate = newUser.Birthdate.RemoveTime();
             _context.Users.Add(newUser);
             return new TransactionResult<User> { Item = newUser, Result = await _context.SaveChangesAsync() > 0 };
         }
 
         public async Task<bool> UpdateAsync(User user)
         {
+            user.Birthdate = user.Birthdate.RemoveTime();
             _context.Users.Update(user);
             return (await _context.SaveChangesAsync()) > 0;
         }

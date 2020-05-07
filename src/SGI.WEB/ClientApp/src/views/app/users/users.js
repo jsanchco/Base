@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from "react";
 import { Row, Card, CardBody, CardTitle } from "reactstrap";
-import IntlMessages from "../../helpers/IntlMessages";
-import { Colxx, Separator } from "../../components/common/CustomBootstrap";
-import Breadcrumb from "../../containers/navs/Breadcrumb";
-import { USERS, ROLES } from "../../constants/defaultValues";
+import IntlMessages from "../../../helpers/IntlMessages";
+import { Colxx, Separator } from "../../../components/common/CustomBootstrap";
+import Breadcrumb from "../../../containers/navs/Breadcrumb";
+import { USERS, ROLES } from "../../../constants/defaultValues";
 import {
   ColumnDirective,
   ColumnsDirective,
@@ -16,11 +16,11 @@ import {
   Group,
   Sort,
 } from "@syncfusion/ej2-react-grids";
-import { NotificationManager } from "../../components/common/react-notifications";
-import { getError } from "../../helpers/Utils";
-import { getDataManager } from "../../helpers/Utils";
+import { NotificationManager } from "../../../components/common/react-notifications";
+import { getError } from "../../../helpers/Utils";
+import { getDataManager } from "../../../helpers/Utils";
 
-export default class UsersPage extends Component {
+export default class Users extends Component {
 
   users = getDataManager(USERS);
   roles = getDataManager(ROLES);

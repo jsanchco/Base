@@ -148,6 +148,11 @@
                     return NotFound();
 
                 patchDocument.ApplyTo(userPatch, ModelState);
+                if (!ModelState.IsValid)
+                {
+                    throw new Exception("Error in update User");
+                }
+
                 var userViewModel = _mapper.Map<UserViewModel>(userPatch);
 
                 if (!await _supervisor.UpdateUserAsync(userViewModel))
